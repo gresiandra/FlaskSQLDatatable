@@ -15,6 +15,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="../static/styles/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
@@ -46,6 +47,9 @@
                             <div class="card-header">
                             </div>
                             <div class="card-body">
+                                <!-- <div class="mb-3 mt-3">
+                                    Toggle column: <a class="toggle-vis" data-column="0">Toko</a> - <a class="toggle-vis" data-column="1">R-Type</a> - <a class="toggle-vis" data-column="2">Tanggal</a> - <a class="toggle-vis" data-column="3">PLU</a> - <a class="toggle-vis" data-column="4">Quantity</a> - <a class="toggle-vis" data-column="5">Harga</a>
+                                </div> -->
                                 <table class="table" id="datatablesSimple">
                                     <thead>
                                         <tr>
@@ -81,6 +85,12 @@
         </div>
         <script src="../static/jquery-3.5.1.js"></script>
         <script src="../static/jquery.dataTables.min.js"></script>
+        <script src="../static/dataTables.buttons.min.js"></script>
+        <script src="../static/jszip.min.js"></script>
+        <script src="../static/pdfmake.min.js"></script>
+        <script src="../static/vfs_fonts.js"></script>
+        <script src="../static/buttons.html5.min.js"></script>
+        <script src="../static/buttons.print.min.js"></script>
         <script>
         $(document).ready(function () {
             // Setup - add a text input to each footer cell
@@ -91,8 +101,12 @@
         
             var table = $('#datatablesSimple').DataTable({
                 scrollX: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
                 orderCellsTop: true,
-                fixedHeader: true,
+                fixedHeader: false,
                 initComplete: function () {
                     var api = this.api();
         
@@ -141,6 +155,16 @@
                         });
                 },
             });
+
+            // $('a.toggle-vis').on( 'click', function (e) {
+            //     e.preventDefault();
+        
+            //     // Get the column API object
+            //     var column = table.column( $(this).attr('data-column') );
+        
+            //     // Toggle the visibility
+            //     column.visible( ! column.visible() );
+            // });
         });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

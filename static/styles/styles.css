@@ -11613,7 +11613,7 @@ body {
   font-weight: bold;
 }
 
-/* TABLE */
+TABLE
 .dataTable-table {
   border-collapse: collapse;
 }
@@ -11682,9 +11682,6 @@ body {
   opacity: 0.6;
 }
 
-.dataTables-empty {
-  text-align: center;
-}
 
 .dataTable-top::after,
 .dataTable-bottom::after {
