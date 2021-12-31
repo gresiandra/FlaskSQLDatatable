@@ -2,11 +2,14 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
+from flask import Flask, render_template, request
+from flask_mysqldb import MySQL
 import sqlalchemy as sql
 import pandas as pd
 import pypyodbc
-import pyodbc
 import csv
+import pyodbc
+import mysql.connector
 
 app = Flask(__name__)
 
@@ -16,47 +19,82 @@ def running():
     df = []
     df1 = []
 
-    # USING PYODBC
-    # conn = pyodbc.connect('Driver={SQL Server};'
-    #                   'Server=DESKTOP-CN8MUQ4;'
-    #                   'Database=gudang;'
-    #                   'UID=;'
-    #                   'PWD=;')
-    # cursor = conn.cursor()
-    
-    # USING MSSQLENGINE/SQLALCHEMY
-    # ServerName = 'DESKTOP-CN8MUQ4' #Change to Your Server
-    # InstanceName = '' #Change to your Instance Name
-    # DatabaseName = 'gudang'
+    # USING MYSQL.CONNECTOR
+    mydb = mysql.connector.connect(host="192.168.59.221", user="root", passwd="12345678", database="ic")
 
-    # MSSQLengine = sql.create_engine('mssql+pyodbc://' + ServerName + "\\" + InstanceName + '/' + DatabaseName + '?driver=SQL+Server+Native+Client+11.0')
-    # print(str(MSSQLengine))
+    mycursor = mydb.cursor()
 
-    # with MSSQLengine.connect() as con:
-    #     rs = con.execute('SELECT TOKO,RTYPE,TANGGAL1,PRDCD,QTY,PRICE FROM MSTXHG12')
-
-    #     for row in rs:
-    #         df.append(row)
-
-
-    # USING PYPYODBC
-    connection = pypyodbc.connect('Driver={SQL Server};Server=DESKTOP-CN8MUQ4;Database=gudang;uid=;pwd=')# Creating Cursor    
-    cursor = connection.cursor()    
-
-    rs = cursor.execute("SELECT * FROM MSTXHG12")
+    mycursor.execute("SELECT toko.TOKO, MSTXHG.TANGGAL1, MSTXHG.PRDCD, plu_igr.DESC, COUNT(MSTXHG.PRDCD) AS JUMLAH_BARANG FROM toko JOIN MSTXHG ON toko.TOKO=MSTXHG.TOKO JOIN plu_igr ON plu_igr.PRDCD=MSTXHG.PRDCD WHERE MSTXHG.TANGGAL1='2021-12-17' AND toko.TOKO='F2LV' GROUP BY plu_igr.PRDCD")
+    rs = mycursor.fetchall()
 
     for row in rs:
         df.append(row)
 
-    # df1 = pd.DataFrame(df)
-    # header = list(df1.columns.values)
+    df1 = pd.DataFrame(df)
+    header = list(df1.columns.values)
 
-    rs1 = cursor.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='MSTXHG12'")
-    
-    for row1 in rs1:
-        df1.append(row1) 
+    return render_template('index.html', value=df, header=header)
 
-    return render_template('index.html', value=df, header=df1)
+# @app.route("/laporan1", methods=['POST', 'GET'])
+# def running1():
+
+#     df = []
+#     df1 = []
+
+#     # USING PYPYODBC
+#     connection = pypyodbc.connect('Driver={SQL Server};Server=DESKTOP-CN8MUQ4;Database=gudang;uid=;pwd=')# Creating Cursor    
+#     cursor = connection.cursor()    
+
+#     rs = cursor.execute("SELECT RTYPE, TANGGAL1, PRDCD, QTY FROM dbo.MSTXHG12")
+
+#     for row in rs:
+#         df.append(row)
+
+#     df1 = pd.DataFrame(df)
+#     header = list(df1.columns.values)
+
+#     return render_template('index.html', value=df, header=header)
+
+# @app.route("/laporan2", methods=['POST', 'GET'])
+# def running2():
+
+#     df = []
+#     df1 = []
+
+#     # USING PYPYODBC
+#     connection = pypyodbc.connect('Driver={SQL Server};Server=DESKTOP-CN8MUQ4;Database=gudang;uid=;pwd=')# Creating Cursor    
+#     cursor = connection.cursor()    
+
+#     rs = cursor.execute("SELECT TANGGAL1, PRDCD, QTY FROM dbo.MSTXHG12")
+
+#     for row in rs:
+#         df.append(row)
+
+#     df1 = pd.DataFrame(df)
+#     header = list(df1.columns.values)
+
+#     return render_template('index.html', value=df, header=header)
+
+# @app.route("/laporan3", methods=['POST', 'GET'])
+# def running3():
+
+#     df = []
+#     df1 = []
+
+#     # USING PYPYODBC
+#     connection = pypyodbc.connect('Driver={SQL Server};Server=DESKTOP-CN8MUQ4;Database=gudang;uid=;pwd=')# Creating Cursor    
+#     cursor = connection.cursor()    
+
+#     rs = cursor.execute("SELECT TANGGAL1, PRDCD, QTY FROM dbo.MSTXHG12")
+
+#     for row in rs:
+#         df.append(row)
+
+#     df1 = pd.DataFrame(df)
+#     header = list(df1.columns.values)
+
+#     return render_template('index.html', value=df, header=header)
+
 
 if __name__ == '__main__':
    app.run()

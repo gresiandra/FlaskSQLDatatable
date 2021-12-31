@@ -32,9 +32,21 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Main</div>
+                            <a class="nav-link" href="/">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Laporan 1 
+                            </a>
+                            <a class="nav-link" href="/laporan2">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Laporan 2 
+                            </a>
                             <a class="nav-link" href="index.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard 
+                                Laporan 3 
+                            </a>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Laporan 4 
                             </a>
                         </div>
                     </div>
@@ -47,16 +59,11 @@
                             <div class="card-header">
                             </div>
                             <div class="card-body">
-                                <div class="mb-3 mt-3">
-                                    Toggle column: <a class="toggle-vis" data-column="0">Toko</a> - <a class="toggle-vis" data-column="1">R-Type</a> - <a class="toggle-vis" data-column="2">Tanggal</a> - <a class="toggle-vis" data-column="3">PLU</a> - <a class="toggle-vis" data-column="4">Quantity</a> - <a class="toggle-vis" data-column="5">Harga</a>
-                                </div>
                                 <table class="table" id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             {%for x in header%}
-                                                {%for y in x%}
-                                                    <th>{{ y }}</th>
-                                                {%endfor%}
+                                                <th>{{ x }}</th>
                                             {%endfor%}
                                         </tr>
                                     </thead>
@@ -153,16 +160,6 @@
                                 });
                         });
                 },
-            });
-
-            $('a.toggle-vis').on( 'click', function (e) {
-                e.preventDefault();
-        
-                // Get the column API object
-                var column = table.column( $(this).attr('data-column') );
-        
-                // Toggle the visibility
-                column.visible( ! column.visible() );
             });
         });
         </script>
