@@ -21,7 +21,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-2" href="index.html">SQL SERVER MSTXHG</a>
+            <a class="navbar-brand ps-2" href="/">LAPORAN IC</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar-->
@@ -57,6 +57,11 @@
                             <div class="card-header">
                             </div>
                             <div class="card-body">
+                                <form class="mb-4 mt-4" action="/laporan1" method="post">
+                                    <label for="tanggal">Tanggal</label>
+                                    <input type="date" id="tanggal" name="ftanggal" placeholder="masukan tanggal">
+                                    <button type="submit">Refresh Table</button>
+                                </form>
                                 <table class="table" id="datatablesSimple">
                                     <thead>
                                         <tr>
