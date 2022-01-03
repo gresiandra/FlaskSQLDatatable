@@ -51,7 +51,44 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <h1 class="m-4">Selamat Datang di Web Laporan IC</h1>
+                <main>
+                    <div class="container-fluid px-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                            </div>
+                            <div class="card-body">
+                                <form class="mb-4 mt-4" action="/laporan2" method="post">
+                                    <label for="toko">Toko</label>
+                                    <select id="toko" name="ftoko">
+                                        <option value="" selected></option>
+                                        {%for t in ftoko%}
+                                            <option value="{{t}}">{{ t }}</option>
+                                        {%endfor%}
+                                    </select>
+                                    <button type="submit">Refresh Table</button>
+                                </form>
+                                <table class="table" id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            {%for x in header%}
+                                                <th>{{ x }}</th>
+                                            {%endfor%}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%for i in value%}
+                                            <tr>
+                                            {%for j in i%}
+                                                <td>{{ j }}</td>
+                                            {%endfor%}
+                                            </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
