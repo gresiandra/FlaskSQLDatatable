@@ -11,12 +11,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SB Admin</title>
+        <title>Laporan Iventory Control</title>
         <link href="../static/styles/styles.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> 
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"> 
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../static/styles/jquery.dataTables.min.css"> 
+        <link rel="stylesheet" href="../static/dataTables.bootstrap4.min.js"> 
+        <link rel="stylesheet" href="../static/styles/buttons.dataTables.min.css">
+        <script src="../static/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -32,20 +32,12 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Main</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Laporan
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="/laporan1">
+                                Laporan barang bermasalah toko
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="/laporan1">Laporan barang bermasalah toko</a>
-                                    <a class="nav-link" href="/laporan2">Laporan list barang bermasalah</a>
-                                    <a class="nav-link" href="/">Laporan 3</a>
-                                    <a class="nav-link" href="/">Laporan 4</a>
-                                    <a class="nav-link" href="/">Laporan 5</a>
-                                </nav>
-                            </div>
+                            <a class="nav-link" href="/laporan2">
+                                Laporan list barang bermasalah
+                            </a>
                         </div>
                     </div>
                 </nav>
@@ -62,7 +54,7 @@
                                     <input type="date" id="tanggal" name="ftanggal" placeholder="masukan tanggal">
                                     <button type="submit">Refresh Table</button>
                                 </form>
-                                <table class="table" id="datatablesSimple">
+                                <table class="table mt-3" id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             {%for x in header%}
@@ -103,19 +95,29 @@
         <script>
         $(document).ready(function () {
             // Setup - add a text input to each footer cell
+            $('datatablesSimple')
+                .on( 'error.dt', function ( e, settings, techNote, message ) {
+                    console.log( 'An error has been reported by DataTables: ', message );
+                } )
+                .DataTable();
             $('#datatablesSimple thead tr')
                 .clone(true)
                 .addClass('filters')
                 .appendTo('#datatablesSimple thead');
         
             var table = $('#datatablesSimple').DataTable({
+                "columnDefs": [
+                    { className: "dt-body-left", "targets": [ 0 ] }
+                ],
                 scrollX: true,
+                fixedHeader: false,
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ],
                 orderCellsTop: true,
                 fixedHeader: false,
+                paging: false,
                 initComplete: function () {
                     var api = this.api();
         
@@ -164,6 +166,7 @@
                         });
                 },
             });
+            table.columns.adjust().draw();
         });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

@@ -11870,3 +11870,14 @@ TABLE
 	content: " ";
 	display: table;
 }
+
+table.table thead th,
+table.table thead td {
+  padding: 10px 18px 10px 5px;
+  border-right: 1px solid #dddddd;
+}
+table.table tbody th,
+table.table tbody td {
+  padding: 10px 18px 10px 5px;
+  border-right: 1px solid #dddddd;
+}
