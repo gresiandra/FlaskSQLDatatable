@@ -19,7 +19,7 @@ def dataLaporan1():
 
     df = []
     df1 = []
-    ftanggal = '2021-12-01'
+    ftanggal = '2022-01-07'
     
     if request.method == "POST":
        # getting input with name = fname in HTML form
@@ -34,17 +34,21 @@ def dataLaporan1():
 
     mycursor = mydb.cursor()
 
-    mycursor.execute("SELECT MSTXHG.TOKO, toko.NAMA, mstxhg.tanggal1, count(MSTXHG.PRDCD)as BARANG_BERMASALAH FROM MSTXHG join toko on MSTXHG.TOKO=toko.TOKO where mstxhg.tanggal1='"+ftanggal+"'group by MSTXHG.TOKO order by count(MSTXHG.PRDCD) desc")
-    rs = mycursor.fetchall()
+    try:
+        mycursor.execute("SELECT MSTXHG.TOKO, toko.NAMA, mstxhg.tanggal1, count(MSTXHG.PRDCD)as BARANG_BERMASALAH FROM MSTXHG join toko on MSTXHG.TOKO=toko.TOKO where mstxhg.tanggal1='"+ftanggal+"'group by MSTXHG.TOKO order by count(MSTXHG.PRDCD) desc")
+        rs = mycursor.fetchall()
+        
+        for row in rs:
+            df.append(row)
 
-    for row in rs:
-        df.append(row)
+        df1 = pd.DataFrame(df)
+        df1.columns =['Kode Toko', 'Nama Toko', 'Tanggal','Barang Bermasalah']
+        header = list(df1.columns.values)
+        
+        return render_template('laporan1.html', value=df, header=header)
 
-    df1 = pd.DataFrame(df)
-    df1.columns =['Kode Toko', 'Nama Toko', 'Tanggal','Barang Bermasalah']
-    header = list(df1.columns.values)
-
-    return render_template('laporan1.html', value=df, header=header)
+    except:
+        return render_template('404.html')
 
 @app.route("/laporan2", methods=['POST', 'GET'])
 def dataLaporan2():
@@ -77,17 +81,21 @@ def dataLaporan2():
 
     mycursor = mydb.cursor()
 
-    mycursor.execute("SELECT MSTXHG.TOKO, toko.NAMA, mstxhg.tanggal1, plu_igr.plu, plu_igr.desc, count(plu_igr.plu) as Jumlah FROM MSTXHG join toko on MSTXHG.TOKO=toko.TOKO join plu_igr on mstxhg.prdcd=plu_igr.prdcd where mstxhg.toko='"+toko+"'group by plu_igr.plu order by mstxhg.tanggal1")
-    rs = mycursor.fetchall()
+    try:
+        mycursor.execute("SELECT MSTXHG.TOKO, toko.NAMA, mstxhg.tanggal1, plu_igr.plu, plu_igr.desc, count(plu_igr.plu) as Jumlah FROM MSTXHG join toko on MSTXHG.TOKO=toko.TOKO join plu_igr on mstxhg.prdcd=plu_igr.prdcd where mstxhg.toko='"+toko+"'group by plu_igr.plu order by mstxhg.tanggal1")
+        rs = mycursor.fetchall()
 
-    for row in rs:
-        df.append(row)
+        for row in rs:
+            df.append(row)
 
-    df1 = pd.DataFrame(df)
-    df1.columns =['Kode Toko', 'Nama Toko', 'Tanggal','PLU', 'Nama Barang', 'Jumlah']
-    header = list(df1.columns.values)
+            df1 = pd.DataFrame(df)
+            df1.columns =['Kode Toko', 'Nama Toko', 'Tanggal','PLU', 'Nama Barang', 'Jumlah']
+            header = list(df1.columns.values)   
 
-    return render_template('laporan2.html', value=df, header=header, ftoko=ftoko)
+        return render_template('laporan2.html', value=df, header=header, ftoko=ftoko)
+
+    except:
+        return render_template('404.html')
 
 
 if __name__ == '__main__':
