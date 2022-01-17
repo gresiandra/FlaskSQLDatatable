@@ -95,11 +95,6 @@
         <script>
         $(document).ready(function () {
             // Setup - add a text input to each footer cell
-            $('datatablesSimple')
-                .on( 'error.dt', function ( e, settings, techNote, message ) {
-                    console.log( 'An error has been reported by DataTables: ', message );
-                } )
-                .DataTable();
             $('#datatablesSimple thead tr')
                 .clone(true)
                 .addClass('filters')
