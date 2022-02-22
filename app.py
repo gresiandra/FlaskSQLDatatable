@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import Flask, flash
 from flask import render_template
 from flask import request
 from flask import redirect
 from flask import Flask, render_template, request
 from flask import render_template, url_for
 import pandas as pd
+import openpyxl
+from openpyxl import load_workbook
+from pandas import ExcelWriter
 import mysql.connector as mc
 
 app = Flask(__name__)
@@ -19,7 +22,7 @@ def dataLaporan1():
 
     df = []
     df1 = []
-    ftanggal = '2022-01-07'
+    ftanggal = '2022-01-01'
     
     if request.method == "POST":
        # getting input with name = fname in HTML form
@@ -53,6 +56,7 @@ def dataLaporan1():
 @app.route("/laporan2", methods=['POST', 'GET'])
 def dataLaporan2():
 
+    i = 0
     df = []
     df1 = []
     toko = 'F04S'
@@ -70,6 +74,9 @@ def dataLaporan2():
     if request.method == "POST":
        # getting input with name = fname in HTML form
        toko = str(request.form.get("ftoko"))
+
+    workbook = load_workbook(filename="Training.xlsx")
+    sheet = workbook.active
 
     # USING MYSQL.CONNECTOR
     mydb = mc.connect(
@@ -90,13 +97,21 @@ def dataLaporan2():
 
             df1 = pd.DataFrame(df)
             df1.columns =['Kode Toko', 'Nama Toko', 'Tanggal','PLU', 'Nama Barang', 'Jumlah']
-            header = list(df1.columns.values)   
+            header = list(df1.columns.values)
+
+        # Adding data to excel file
+        while i < len(df1['Kode Toko']):
+            sheet.cell(row=i+2, column=1).value = df1['Kode Toko'][i]
+            sheet.cell(row=i+2, column=2).value = df1['Nama Toko'][i]
+            sheet.cell(row=i+2, column=3).value = df1['Tanggal'][i]
+            i = i+1
+        
+        workbook.save(filename="Training.xlsx")
 
         return render_template('laporan2.html', value=df, header=header, ftoko=ftoko)
-
+    
     except:
         return render_template('404.html')
-
 
 if __name__ == '__main__':
    app.run(ssl_context=('cert.pem', 'key.pem'))
